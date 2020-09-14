@@ -6,7 +6,8 @@ async function run() {
     .demand(['url'])
     .argv;
 
-  const browser = await puppeteer.launch();
+  // no-sandbox needed for linux (@amax telegram)
+  const browser = await puppeteer.launch({headless: true, args:['--no-sandbox']});
   const page = await browser.newPage();
 
   let errorCode = 0;
