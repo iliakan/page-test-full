@@ -21,6 +21,7 @@ async function run() {
   });
 
   page.on("console", (message) => {  
+    // catches 404 for network requests
     if (message.type() != 'error') return;
     errorCode = 1;
     console.log("Console error: " + message.text()); 
