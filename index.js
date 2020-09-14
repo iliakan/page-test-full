@@ -20,6 +20,13 @@ async function run() {
     console.log("Error: " + err); 
   });
 
+  page.on("console", (message) => {  
+    if (message.type() != 'error') return;
+    errorCode = 1;
+    console.log("Console error: " + message.text()); 
+  });
+
+
   await page.goto(args.url, {
     waitUntil: 'networkidle0'
   });
