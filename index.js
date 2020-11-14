@@ -29,6 +29,12 @@ async function run() {
     if (message.type() != 'error') return;
     errorCode = 1;
     console.log("Console error: " + message.text()); 
+
+    let trace = message.stackTrace();
+    for(let stackItem of trace) {
+      let at = stackItem.lineNumber ? `@${stackItem.lineNumber}:${stackItem.lineNumber}`: ``;
+      console.log(`At ${stackItem.url || ''}${at}`);
+    }
   });
 
 
