@@ -1,14 +1,17 @@
 const puppeteer = require('puppeteer');
 
+let args = require('yargs')
+.example("node index.js --url https://learn.javascript.info")
+.demand(['url'])
+.argv;
+
 async function run() {
-  let args = require('yargs')
-    .example("node index.js --url https://learn.javascript.info")
-    .demand(['url'])
-    .argv;
 
   // no-sandbox needed for linux (@amax telegram)
   const browser = await puppeteer.launch({headless: true, args:['--no-sandbox']});
   const page = await browser.newPage();
+
+  page.setDefaultTimeout(10e3);
 
   let errorCode = 0;
   page.on("pageerror", function(err) { 
@@ -29,13 +32,15 @@ async function run() {
   });
 
 
-  await page.goto(args.url, {
-    waitUntil: 'networkidle0'
-  });
+  try {
+    await page.goto(args.url, {
+      waitUntil: 'networkidle0'
+    });
+  } finally {
+    await browser.close();
 
-  await browser.close();
-
-  process.exit(errorCode)
+    process.exit(errorCode)
+  }
 }
 
 run();
