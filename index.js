@@ -1,7 +1,7 @@
 const puppeteer = require('puppeteer');
 
 let args = require('yargs')
-.example("node index.js --url https://learn.javascript.info")
+.example("node index.js --url https://learn.javascript.ru")
 .demand(['url'])
 .argv;
 
