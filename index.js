@@ -24,6 +24,15 @@ async function run() {
     console.log("Error: " + err); 
   });
 
+
+  // invalid server name, e.g. http://notexists.com/
+  page.on("requestfailed", function (request) {  
+    errorCode = 1;
+    let failure = request.failure();
+    // console.log(err);
+    console.log("Error: " + failure.errorText + " at " + request.url()); 
+  });
+
   page.on("console", (message) => {  
     // catches 404 for network requests
     if (message.type() != 'error') return;
@@ -37,6 +46,12 @@ async function run() {
     }
   });
 
+  /*
+  let emit = page.emit;
+  page.emit = function() {
+    console.log(arguments);
+    return emit.apply(this, arguments);
+  }*/
 
   try {
     await page.goto(args.url, {
