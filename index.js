@@ -10,8 +10,21 @@ async function run() {
   // no-sandbox needed for linux (@amax telegram)
   const browser = await puppeteer.launch({headless: true, args:['--no-sandbox']});
   const page = await browser.newPage();
+  await page.setRequestInterception(true);
 
   page.setDefaultTimeout(10e3);
+
+  page.on('request', interceptedRequest => {
+    if (interceptedRequest.url().includes('mc.yandex.ru')) {
+      request.respond({
+        status: 200,
+        contentType: 'text/javascript',
+        body: ''
+      });
+    } else {
+      interceptedRequest.continue();
+    }
+  });
 
   let errorCode = 0;
   page.on("pageerror", function(err) { 
