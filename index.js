@@ -14,15 +14,15 @@ async function run() {
 
   page.setDefaultTimeout(10e3);
 
-  page.on('request', interceptedRequest => {
-    if (interceptedRequest.url().includes('mc.yandex.ru')) {
+  page.on('request', request => {
+    if (request.url().includes('mc.yandex.ru')) {
       request.respond({
         status: 200,
         contentType: 'text/javascript',
         body: ''
       });
     } else {
-      interceptedRequest.continue();
+      request.continue();
     }
   });
 
